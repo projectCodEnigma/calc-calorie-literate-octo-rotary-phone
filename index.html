@@ -137,10 +137,23 @@
             color: #666;
         }
 
+        .toggle-button {
+            color: #007bff;
+            cursor: pointer;
+            text-decoration: underline;
+            margin-top: 10px;
+        }
+
+        .toggle-button:hover {
+            text-decoration: none;
+        }
+
+        .weight-gain-results {
+            display: none;
+            margin-top: 20px;
+        }
+
     </style>
-    
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2137593406454250"
-    crossorigin="anonymous"></script>
 </head>
 <body>
     <div class="calculator">
@@ -203,6 +216,9 @@
 
         <div class="result" id="result"></div>
 
+        <span class="toggle-button" id="toggle-weight-gain" onclick="toggleWeightGain()">Show info for weight gain</span>
+        <div class="weight-gain-results" id="weight-gain-results"></div>
+
         <div class="notes">
             <p>Exercise: 15-30 minutes of elevated heart rate activity.<br>
             Intense exercise: 45-120 minutes of elevated heart rate activity.<br>
@@ -254,7 +270,12 @@
                     <div class="result-item"><span>Mild weight loss (0.5 lb/week)</span><span>${Math.round(totalCalories - 250)} Calories/day</span></div>
                     <div class="result-item"><span>Weight loss (1 lb/week)</span><span>${Math.round(totalCalories - 500)} Calories/day</span></div>
                     <div class="result-item"><span>Extreme weight loss (2 lb/week)</span><span>${Math.round(totalCalories - 1000)} Calories/day</span></div>
-                    <p class="result-summary">All results use US units (Calories/day).</p>
+                `;
+
+                document.getElementById('weight-gain-results').innerHTML = `
+                    <div class="result-item"><span>Mild weight gain (0.5 lb/week)</span><span>${Math.round(totalCalories + 250)} Calories/day</span></div>
+                    <div class="result-item"><span>Weight gain (1 lb/week)</span><span>${Math.round(totalCalories + 500)} Calories/day</span></div>
+                    <div class="result-item"><span>Fast weight gain (2 lb/week)</span><span>${Math.round(totalCalories + 1000)} Calories/day</span></div>
                 `;
 
             } else if (activeTab.id === 'metric-units') {
@@ -282,8 +303,26 @@
                     <div class="result-item"><span>Mild weight loss (0.25 kg/week)</span><span>${Math.round(totalCalories - 250)} kCal/day</span></div>
                     <div class="result-item"><span>Weight loss (0.5 kg/week)</span><span>${Math.round(totalCalories - 500)} kCal/day</span></div>
                     <div class="result-item"><span>Extreme weight loss (1 kg/week)</span><span>${Math.round(totalCalories - 1000)} kCal/day</span></div>
-                    <p class="result-summary">All results use Metric units (kCal/day).</p>
                 `;
+
+                document.getElementById('weight-gain-results').innerHTML = `
+                    <div class="result-item"><span>Mild weight gain (0.25 kg/week)</span><span>${Math.round(totalCalories + 250)} kCal/day</span></div>
+                    <div class="result-item"><span>Weight gain (0.5 kg/week)</span><span>${Math.round(totalCalories + 500)} kCal/day</span></div>
+                    <div class="result-item"><span>Fast weight gain (1 kg/week)</span><span>${Math.round(totalCalories + 1000)} kCal/day</span></div>
+                `;
+            }
+        }
+
+        function toggleWeightGain() {
+            const weightGainSection = document.getElementById('weight-gain-results');
+            const toggleButton = document.getElementById('toggle-weight-gain');
+
+            if (weightGainSection.style.display === 'none' || weightGainSection.style.display === '') {
+                weightGainSection.style.display = 'block';
+                toggleButton.innerText = 'Hide info for weight gain';
+            } else {
+                weightGainSection.style.display = 'none';
+                toggleButton.innerText = 'Show info for weight gain';
             }
         }
     </script>
