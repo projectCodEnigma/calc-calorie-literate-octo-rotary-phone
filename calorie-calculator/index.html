@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calorie Calculator</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Verdana:wght@400&display=swap');
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .calculator {
+            max-width: 400px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 24px;
+            color: #333;
+        }
+
+        .tabs {
+            display: flex;
+            justify-content: space-between;
+            background: #e9e9e9;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .tab {
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            border: 1px solid #ccc;
+            border-radius: 5px 5px 0 0;
+        }
+
+        .tab.active {
+            background: #fff;
+            border-bottom: none;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .gender-options {
+            display: flex;
+            gap: 10px;
+            margin-top: 5px;
+        }
+
+        .gender-options label {
+            font-weight: normal;
+        }
+
+        .btn-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            background-color: #28a745;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        .result {
+            margin-top: 20px;
+            background-color: #e6f4e9;
+            border: 1px solid #4caf50;
+            padding: 15px;
+            border-radius: 5px;
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0;
+            background: #fff;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .result-item span {
+            font-weight: bold;
+        }
+
+        .result-summary {
+            font-size: 14px;
+            margin-top: 10px;
+            color: #555;
+        }
+
+        .notes {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #666;
+        }
+
+    </style>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2137593406454250"
+    crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="calculator">
+        <h1>Calorie Calculator</h1>
+
+        <div class="tabs">
+            <div class="tab active" onclick="switchTab('us-units')">US Units</div>
+            <div class="tab" onclick="switchTab('metric-units')">Metric Units</div>
+        </div>
+
+        <div id="us-units" class="tab-content active">
+            <label for="age">Age (15 - 80)</label>
+            <input type="number" id="age" min="15" max="80" required>
+
+            <label>Gender</label>
+            <div class="gender-options">
+                <label><input type="radio" name="gender" value="male" checked> Male</label>
+                <label><input type="radio" name="gender" value="female"> Female</label>
+            </div>
+
+            <label for="height-feet">Height</label>
+            <div style="display: flex; gap: 10px;">
+                <input type="number" id="height-feet" placeholder="Feet" min="1" max="8" required>
+                <input type="number" id="height-inches" placeholder="Inches" min="0" max="11" required>
+            </div>
+
+            <label for="weight">Weight (lbs)</label>
+            <input type="number" id="weight" min="1" required>
+        </div>
+
+        <div id="metric-units" class="tab-content">
+            <label for="age-metric">Age (15 - 80)</label>
+            <input type="number" id="age-metric" min="15" max="80" required>
+
+            <label>Gender</label>
+            <div class="gender-options">
+                <label><input type="radio" name="gender-metric" value="male" checked> Male</label>
+                <label><input type="radio" name="gender-metric" value="female"> Female</label>
+            </div>
+
+            <label for="height-cm">Height (cm)</label>
+            <input type="number" id="height-cm" min="50" max="250" required>
+
+            <label for="weight-kg">Weight (kg)</label>
+            <input type="number" id="weight-kg" min="1" required>
+        </div>
+
+        <label for="activity">Activity Level</label>
+        <select id="activity">
+            <option value="1.2">Sedentary: little or no exercise</option>
+            <option value="1.375">Light: exercise 1-3 times/week</option>
+            <option value="1.55">Moderate: exercise 4-5 times/week</option>
+            <option value="1.725">Active: daily exercise or intense exercise 3-4 times/week</option>
+            <option value="1.9">Very Active: intense exercise 6-7 times/week</option>
+        </select>
+
+        <div class="btn-container">
+            <button onclick="calculateCalories()">Calculate</button>
+        </div>
+
+        <div class="result" id="result"></div>
+
+        <div class="notes">
+            <p>Exercise: 15-30 minutes of elevated heart rate activity.<br>
+            Intense exercise: 45-120 minutes of elevated heart rate activity.<br>
+            Very intense exercise: 2+ hours of elevated heart rate activity.</p>
+        </div>
+    </div>
+
+    <script>
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+
+            document.querySelector(`.tab[onclick="switchTab('${tabId}')"]`).classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+        }
+
+        function calculateCalories() {
+            const activeTab = document.querySelector('.tab-content.active');
+
+            let bmr;
+            let totalCalories;
+
+            if (activeTab.id === 'us-units') {
+                const age = document.getElementById('age').value;
+                const gender = document.querySelector('input[name="gender"]:checked').value;
+                const heightFeet = document.getElementById('height-feet').value;
+                const heightInches = document.getElementById('height-inches').value;
+                const weight = document.getElementById('weight').value;
+
+                if (!age || !heightFeet || !heightInches || !weight) {
+                    alert('Please fill in all the fields.');
+                    return;
+                }
+
+                const heightInCm = (heightFeet * 30.48) + (heightInches * 2.54);
+                const weightInKg = weight * 0.453592;
+
+                if (gender === 'male') {
+                    bmr = 10 * weightInKg + 6.25 * heightInCm - 5 * age + 5;
+                } else {
+                    bmr = 10 * weightInKg + 6.25 * heightInCm - 5 * age - 161;
+                }
+
+                const activityLevel = document.getElementById('activity').value;
+                totalCalories = bmr * activityLevel;
+
+                document.getElementById('result').innerHTML = `
+                    <div class="result-item"><span>Maintain weight</span><span>${Math.round(totalCalories)} Calories/day</span></div>
+                    <div class="result-item"><span>Mild weight loss (0.5 lb/week)</span><span>${Math.round(totalCalories - 250)} Calories/day</span></div>
+                    <div class="result-item"><span>Weight loss (1 lb/week)</span><span>${Math.round(totalCalories - 500)} Calories/day</span></div>
+                    <div class="result-item"><span>Extreme weight loss (2 lb/week)</span><span>${Math.round(totalCalories - 1000)} Calories/day</span></div>
+                    <p class="result-summary">All results use US units (Calories/day).</p>
+                `;
+
+            } else if (activeTab.id === 'metric-units') {
+                const age = document.getElementById('age-metric').value;
+                const gender = document.querySelector('input[name="gender-metric"]:checked').value;
+                const heightCm = document.getElementById('height-cm').value;
+                const weightKg = document.getElementById('weight-kg').value;
+
+                if (!age || !heightCm || !weightKg) {
+                    alert('Please fill in all the fields.');
+                    return;
+                }
+
+                if (gender === 'male') {
+                    bmr = 10 * weightKg + 6.25 * heightCm - 5 * age + 5;
+                } else {
+                    bmr = 10 * weightKg + 6.25 * heightCm - 5 * age - 161;
+                }
+
+                const activityLevel = document.getElementById('activity').value;
+                totalCalories = bmr * activityLevel;
+
+                document.getElementById('result').innerHTML = `
+                    <div class="result-item"><span>Maintain weight</span><span>${Math.round(totalCalories)} kCal/day</span></div>
+                    <div class="result-item"><span>Mild weight loss (0.25 kg/week)</span><span>${Math.round(totalCalories - 250)} kCal/day</span></div>
+                    <div class="result-item"><span>Weight loss (0.5 kg/week)</span><span>${Math.round(totalCalories - 500)} kCal/day</span></div>
+                    <div class="result-item"><span>Extreme weight loss (1 kg/week)</span><span>${Math.round(totalCalories - 1000)} kCal/day</span></div>
+                    <p class="result-summary">All results use Metric units (kCal/day).</p>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>
